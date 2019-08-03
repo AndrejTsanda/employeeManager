@@ -3,6 +3,8 @@ package com.tsanda.employeeManager.controller;
 import com.tsanda.employeeManager.domain.Employee;
 import com.tsanda.employeeManager.exception.NotFoundException;
 import com.tsanda.employeeManager.service.EmployeeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Api(value = "EmployeeController", description = "REST APIs related to Employee Entity.")
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -25,12 +28,14 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    @ApiOperation(value = "Get all Employees")
     @GetMapping("")
     public List<Employee> getAllEmployees() {
         log.info("process = get-employees!");
         return this.employeeService.getAllEmployees();
     }
 
+    @ApiOperation(value = "Get Employee By Id")
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) {
 
@@ -41,6 +46,7 @@ public class EmployeeController {
                 .orElseThrow(NotFoundException::new);
     }
 
+    @ApiOperation(value = "Create Employee")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee createEmployee(@RequestBody Employee employee) {
@@ -48,6 +54,7 @@ public class EmployeeController {
         return this.employeeService.createEmployee(employee);
     }
 
+    @ApiOperation(value = "Update Employee By Id")
     @PutMapping("/{id}")
     public Employee updateEmployeeById(@PathVariable("id") Long id, @RequestBody Employee employee) {
         employee.setId(id);
@@ -55,6 +62,7 @@ public class EmployeeController {
         return this.employeeService.updateEmployee(employee);
     }
 
+    @ApiOperation(value = "Delete Employee By Id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployeeById(@PathVariable("id") Long id) {
